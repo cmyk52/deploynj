@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const movies = require("./movies.json");
+const crypto = require("crypto");
 const PORT = process.env.PORT || 3000;
 
 //middlewares
@@ -26,17 +27,33 @@ app.get("/movies/:id", (req, res) => {
 
     const movie = movies.find(movies => movies.id === id);
 
-    if (!movies) {
-        return res.status(404).send("Movie not found");
+    if (movie) {
+        return res.send(movie);
     }
-
-    return res.send(movie);
+    return res.status(404).json({ error: "Movie not found" });
 
 
 })
 
-//put.routes
+//post.routes
 
+app.post("/movies/", (req, res) => {
+    const { id, title, year, director, duration, poster, genre, rate } = req.body;
+    const newMovie = {
+        id: crypto.randomUUID(),
+        title,
+        year,
+        director,
+        duration,
+        poster,
+        genre,
+        rate
+
+    }
+
+    movies.push(newMovie);
+    return res.status(201).send(movies);
+})
 
 //patch.routes
 
