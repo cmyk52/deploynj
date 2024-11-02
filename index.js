@@ -57,6 +57,30 @@ app.post("/movies/", (req, res) => {
 
 //patch.routes
 
+app.get("/movies/:id", (req, res) => {
+    const id = req.params.id;
+    const movieIndex = movies.findIndex(m => m.id === id);
+
+    if (movieIndex === -1) {
+        return res.status(404).json({ error: 'Movie not found' });
+    }
+
+    const movie = movies[movieIndex];
+    const { title, year, director, duration, poster, genre, rate } = req.body;
+
+    movie.title = title || movie.title;
+    movie.year = year || movie.year;
+    movie.director = director || movie.director;
+    movie.duration = duration || movie.duration;
+    movie.poster = poster || movie.poster;
+    movie.genre = genre || movie.genre;
+    movie.rate = rate || movie.rate;
+
+    return res.json(movies[movieIndex]);
+
+
+})
+
 
 //delete.routes
 
