@@ -2,11 +2,13 @@ const express = require("express");
 const app = express();
 const movies = require("./movies.json");
 const crypto = require("crypto");
+const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 
 //middlewares
 
 app.use(express.json());
+app.use(cors());
 
 //ROUTES
 
