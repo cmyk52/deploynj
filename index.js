@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-//routes
+//ROUTES
 
 //get.routes
 app.get("/", (req, res) => {
@@ -52,15 +52,17 @@ app.post("/movies/", (req, res) => {
     }
 
     movies.push(newMovie);
-    return res.status(201).send(movies);
+    return res.status(201).json(newMovie);
 })
 
 //patch.routes
 
-app.get("/movies/:id", (req, res) => {
+app.patch("/movies/:id", (req, res) => {
     const id = req.params.id;
-    const movieIndex = movies.findIndex(m => m.id === id);
 
+    const movieIndex = movies.findIndex(movies => movies.id === id);
+    console.log(movies)
+    console.log(movieIndex)
     if (movieIndex === -1) {
         return res.status(404).json({ error: 'Movie not found' });
     }
@@ -84,7 +86,9 @@ app.get("/movies/:id", (req, res) => {
 
 //delete.routes
 
-
+app.delete("/movies/:id", (req, res) => {
+    return res.json(message = "Movie deleted");
+})
 
 
 //404.routes
