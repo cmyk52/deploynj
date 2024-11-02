@@ -87,14 +87,20 @@ app.patch("/movies/:id", (req, res) => {
 //delete.routes
 
 app.delete("/movies/:id", (req, res) => {
-    return res.json(message = "Movie deleted");
+    const { id } = req.params
+    const movieIndex = movies.findIndex(movie => movie.id === id);
+    if (movieIndex === -1) {
+        return res.status(404).json({ error: 'Movie not found' });
+    }
+    movies.splice(movieIndex, 1);
+    return res.json({ message: 'Movie deleted' });
 })
 
 
 //404.routes
 
 app.use((req, res) => {
-    return res.status(404).send("Not found");
+    return res.status(404).json({ error: "Route not found" });
 })
 
 app.listen(PORT, () => {
