@@ -5,6 +5,8 @@ const PORT = process.env.PORT || 3000;
 
 //middlewares
 
+app.use(express.json());
+
 //routes
 
 //get.routes
@@ -12,8 +14,23 @@ app.get("/", (req, res) => {
     res.send("hola mundo");
 })
 
-app.get("/movies", (req, res) => {
-    res.send(movies);
+app.get("/movies/", (req, res) => {
+
+    return res.send(movies);
+
+
+})
+
+app.get("/movies/:id", (req, res) => {
+    const id = req.params.id;
+
+    const movie = movies.find(movies => movies.id === id);
+
+    if (!movies) {
+        return res.status(404).send("Movie not found");
+    }
+
+    return res.send(movie);
 
 
 })
@@ -32,7 +49,7 @@ app.get("/movies", (req, res) => {
 //404.routes
 
 app.use((req, res) => {
-    res.status(404).send("Not found");
+    return res.status(404).send("Not found");
 })
 
 app.listen(PORT, () => {
