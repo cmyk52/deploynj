@@ -1,13 +1,13 @@
-const express = require("express");
+import express, { json } from "express";
 const app = express();
-const movies = require("./movies.json");
-const crypto = require("crypto");
-const cors = require("cors");
+import movies from "./movies.json" assert { type: 'json' };
+import { randomUUID } from "crypto";
+import cors from "cors";
 const PORT = process.env.PORT || 3000;
 
-//middlewares
+//MIDDLEWARE
 
-app.use(express.json());
+app.use(json());
 app.use(cors());
 
 //ROUTES
@@ -42,7 +42,7 @@ app.get("/movies/:id", (req, res) => {
 app.post("/movies/", (req, res) => {
     const { id, title, year, director, duration, poster, genre, rate } = req.body;
     const newMovie = {
-        id: crypto.randomUUID(),
+        id: randomUUID(),
         title,
         year,
         director,
@@ -105,6 +105,8 @@ app.use((req, res) => {
     return res.status(404).json({ error: "Route not found" });
 })
 
+
+//SERVER
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 })
