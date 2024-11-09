@@ -1,42 +1,45 @@
 import { Router } from "express";
 import movies from "../../movies.json" assert { type: 'json' };
 import { randomUUID } from "crypto";
+import { MovieModel } from "../models/movie.js";
 
 export const router = Router();
 
-router.get("/", (req, res) => {
-    return res.send(movies);
+router.get("/", async (req, res) => {
+
+    const { genre } = req.query;
+    const movies = await MovieModel.getAll({ genre })
+
+    return res.json(movies);
 })
 
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
     const id = req.params.id;
+    const movie = await MovieModel.getId(id)
 
-    const movie = movies.find(movies => movies.id === id);
-
-    if (movie) {
-        return res.send(movie);
-    }
     return res.status(404).json({ error: "Movie not found" });
 
 
 })
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
     const { id, title, year, director, duration, poster, genre, rate } = req.body;
-    const newMovie = {
-        id: randomUUID(),
-        title,
-        year,
-        director,
-        duration,
-        poster,
-        genre,
-        rate
+    // const newMovie = {
+    //     id: randomUUID(),
+    //     title,
+    //     year,
+    //     director,
+    //     duration,
+    //     poster,
+    //     genre,
+    //     rate
 
-    }
+    // }
 
-    movies.push(newMovie);
+    // movies.push(newMovie);
+
+    const newMovie = await MovieModel.newPost({ id, title, year, director, duration, poster, genre, rate })
     return res.status(201).json(newMovie);
 })
 
